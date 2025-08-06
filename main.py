@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.middleware.cors import CORSMiddleware 
 from fastapi.responses import JSONResponse
 import PyPDF2
 from transformers import pipeline
@@ -6,6 +7,17 @@ from io import BytesIO
 import uvicorn
 
 app = FastAPI(title="CV Classification API")
+
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5174"],  
+    allow_credentials=True,
+    allow_methods=["*"],  
+    allow_headers=["*"],
+)
+
 
 # Initialize the text classification model (BERT-based)
 classifier = pipeline("text-classification", model="distilbert-base-uncased-finetuned-sst-2-english")
@@ -18,7 +30,7 @@ CV_CATEGORIES = {
         "Python Developer",
         "DevOps Engineer",
         "Web Designer",
-        "Web Developer",
+        "Web Developer",                              
         "HR Manager",
         "Blockchain Developer",
         "ETL Developer",
